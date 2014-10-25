@@ -1,5 +1,7 @@
 package computergraphics.datastructures;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,6 +131,18 @@ public class TriangleMesh implements ITriangleMesh {
 
 	public void setTriangleList(List<Triangle> triangleList) {
 		this.triangleList = triangleList;
+	}
+	
+	public void updateColor(BufferedImage bImage, double maxStepsX, double maxStepsZ, double step){
+		for (Vertex vertex : vertexList) {
+			final double[] position = vertex.getPosition().data();
+			final double pictureX = (bImage.getWidth(null) / maxStepsX) * (position[0] / step);
+			final double pictureZ = (bImage.getHeight(null) / maxStepsZ) * (position[2] / step);
+			final Color color = new Color(bImage.getRGB((int) pictureX, (int) pictureZ));
+			final Vector3 colorVector = new Vector3(color.getRed() / 255.0, color.getGreen() / 255.0, color.getBlue() / 255.0);
+			vertex.setColor(colorVector);
+		}
+		
 	}
 
 }
