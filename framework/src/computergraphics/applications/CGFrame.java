@@ -5,7 +5,10 @@
  */
 package computergraphics.applications;
 
+import java.awt.Color;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
@@ -36,6 +39,14 @@ public class CGFrame extends AbstractCGFrame {
 	private static final long serialVersionUID = 4257130065274995543L;
 
 	private static final String HEIGHFIELD_FILE = "ground/heightField.png";
+
+	private static final double MAX_X = 1;
+
+	private static final double MAX_Y = 0.1;
+
+	private static final double MAX_Z = 1;
+
+	private static final double STEP = 0.0125;
 	
 	/**
 	 * Constructor.
@@ -51,7 +62,7 @@ public class CGFrame extends AbstractCGFrame {
 		// TriangleMesh trMesh = generateTriangleMesh();
 		TriangleMesh createGround = null;
 		try {
-			createGround = generateGround();
+			createGround = generateGround(MAX_X, MAX_Y, MAX_Z, STEP);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,30 +82,45 @@ public class CGFrame extends AbstractCGFrame {
 		// rn.addChild(triangleNode);
 
 		// mit TriangleMesh
-		colorNode.addChild(trMeshNode);
+		getRoot().addChild(trMeshNode);
 	}
 
 	/**
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	private TriangleMesh generateGround() throws IOException {
+	private TriangleMesh generateGround(double maxX, double maxY, double maxZ, double step) throws IOException {
 		TriangleMesh trMesh = new TriangleMesh();
-		Image bild = ImageIO.read(new File(HEIGHFIELD_FILE));
-		for (double x = 0; x <= 0.875; x += 0.125) {
-			for (double z = 0; z <= 0.875; z += 0.125) {
-				int a = trMesh.addVertex(new Vertex(new Vector3(x, 0.5, z)));
-				int b = trMesh.addVertex(new Vertex(new Vector3(x + 0.125, 0.5, z)));
-				int c = trMesh.addVertex(new Vertex(new Vector3(x, 0.5, z + 0.125)));
+		BufferedImage bImage = ImageIO.read(new File(HEIGHFIELD_FILE));
+		final double maxStepsX = maxX / step;
+		final double maxStepsZ = maxZ / step;
+		for (double x = 0; x <= maxX - step; x += step) {
+			for (double z = 0; z <= maxZ - step; z += step) {
+				int a = trMesh.addVertex(new Vertex(
+						new Vector3(x, getHeight(bImage, x, z, maxStepsX, maxStepsZ), z)));
+				int b = trMesh.addVertex(new Vertex(
+						new Vector3(x + step, getHeight(bImage, x + step, z, maxStepsX, maxStepsZ), z)));
+				int c = trMesh.addVertex(new Vertex(
+						new Vector3(x, getHeight(bImage, x, z + step, maxStepsX, maxStepsZ), z + step)));
 				trMesh.addTriangle(new Triangle(a, b, c));
-				int aOppeside = trMesh.addVertex(new Vertex(new Vector3(x + 0.125, 0.5, z + 0.125)));
-				int bOppeside = trMesh.addVertex(new Vertex(new Vector3(x + 0.125, 0.5, z)));
-				int cOppeside = trMesh.addVertex(new Vertex(new Vector3(x, 0.5, z + 0.125)));
+				int aOppeside = trMesh.addVertex(new Vertex(
+						new Vector3(x + step, getHeight(bImage, x + step, z + step, maxStepsX, maxStepsZ), z + step)));
+				int bOppeside = trMesh.addVertex(new Vertex(
+						new Vector3(x + step, getHeight(bImage, x + step, z, maxStepsX, maxStepsZ), z)));
+				int cOppeside = trMesh.addVertex(new Vertex(
+						new Vector3(x, getHeight(bImage, x, z + step, maxStepsX, maxStepsZ), z + step)));
 				trMesh.addTriangle(new Triangle(aOppeside, bOppeside, cOppeside));
 			}
 		}
 		trMesh.updateNormals();
 		return trMesh;
+	}
+
+	private double getHeight(BufferedImage bImage, double x, double z, double maxStepsX, double maxStepsZ) {
+		final double pictureX = (bImage.getWidth(null) / maxStepsX) * (x / STEP);
+		final double pictureZ = (bImage.getHeight(null) / maxStepsZ) * (z / STEP);
+		final double height = (new Color(bImage.getRGB((int) pictureX, (int) pictureZ)).getRed() / 255.0) * MAX_Y;
+		return height;
 	}
 
 	/**
