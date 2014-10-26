@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
 
 import computergraphics.datastructures.Triangle;
 import computergraphics.datastructures.TriangleMesh;
@@ -21,12 +22,14 @@ public class GenerateTerrain {
 	public static final double MAX_X = 1;
 
 	public static final double MAX_Y = 0.1;
-	
-	public static final double PRECISION = 0.01;
+
+	public static final double PRECISION = 0.0005;
 
 	public static final double MAX_Z = 1;
 
-	public static final double STEP = 0.01;
+	public static final double STEP = 0.0025;
+	
+	public static final int ITERATIONS = 1000;
 
 	/**
 	 * @return
@@ -66,18 +69,24 @@ public class GenerateTerrain {
 		return height;
 	}
 
-	public TriangleMesh generateRandomGround(double maxX, double maxY, double maxZ, double step, double precision) throws IOException {
+	public TriangleMesh generateRandomGround(double maxX, double maxY, double maxZ, double step, double precision)
+			throws IOException {
 		TriangleMesh trMesh = new TriangleMesh();
-		double[][] heightMap = generateRandomHeight(maxX, maxZ, step, maxY, precision);
+		double[][] heightMap = generateMap(maxX, maxZ, step, maxY, precision, ITERATIONS);
 		for (double x = 0; x <= maxX - step; x += step) {
 			for (double z = 0; z <= maxZ - step; z += step) {
-				int a = trMesh.addVertex(new Vertex(new Vector3(x, heightMap[(int) (x/step)][(int) (z/step)], z)));
-				int b = trMesh.addVertex(new Vertex(new Vector3(x + step, heightMap[(int) ((x+step)/step)][(int) (z/step)], z)));
-				int c = trMesh.addVertex(new Vertex(new Vector3(x, heightMap[(int) (x/step)][(int) ((z+step)/step)], z + step)));
+				int a = trMesh.addVertex(new Vertex(new Vector3(x, heightMap[(int) (x / step)][(int) (z / step)], z)));
+				int b = trMesh.addVertex(new Vertex(new Vector3(x + step,
+						heightMap[(int) ((x + step) / step)][(int) (z / step)], z)));
+				int c = trMesh.addVertex(new Vertex(new Vector3(x,
+						heightMap[(int) (x / step)][(int) ((z + step) / step)], z + step)));
 				trMesh.addTriangle(new Triangle(a, b, c));
-				int aOppeside = trMesh.addVertex(new Vertex(new Vector3(x + step, heightMap[(int) ((x+step)/step)][(int) ((z+step)/step)], z + step)));
-				int bOppeside = trMesh.addVertex(new Vertex(new Vector3(x + step, heightMap[(int) ((x+step)/step)][(int) (z/step)], z)));
-				int cOppeside = trMesh.addVertex(new Vertex(new Vector3(x, heightMap[(int) (x/step)][(int) ((z+step)/step)], z + step)));
+				int aOppeside = trMesh.addVertex(new Vertex(new Vector3(x + step,
+						heightMap[(int) ((x + step) / step)][(int) ((z + step) / step)], z + step)));
+				int bOppeside = trMesh.addVertex(new Vertex(new Vector3(x + step,
+						heightMap[(int) ((x + step) / step)][(int) (z / step)], z)));
+				int cOppeside = trMesh.addVertex(new Vertex(new Vector3(x,
+						heightMap[(int) (x / step)][(int) ((z + step) / step)], z + step)));
 				trMesh.addTriangle(new Triangle(aOppeside, bOppeside, cOppeside));
 			}
 		}
@@ -85,40 +94,44 @@ public class GenerateTerrain {
 		return trMesh;
 	}
 
-	private double[][] generateRandomHeight(double maxX, double maxZ, double step, double maxY, double precision) {
-		double[][] heightMap = new double[((int) (maxX/step))-1][((int) (maxY/step))-1];
-		for (int x = 0; x < (int) (maxX/step); x++) {
-			for(int z = 0; z < (int) (maxZ/step); z++){
-				if(x == 0 && z == 0){
-					heightMap[x][z] = Math.random() * maxY;
-				}else if(x == 0 && z != 0){
-					double temp = Math.random() * precision;
-					if(heightMap[x][z-1] + temp >= maxY){
-						heightMap[x][z] = heightMap[x][z-1] - temp;
+	private double[][] generateMap(double maxX, double maxZ, double step, double maxY, double precision, int iterations) {
+		int xArray = (int) (maxX / step);
+		int zArray = (int) (maxZ / step);
+		double[][] heightMap = initMap(xArray,zArray, maxY);
+		for (int i = 0; i < iterations; i++) {
+			int[] abc = calculateLineEquation((int) (Math.random() * xArray), (int) (Math.random() * zArray), 
+					(int) (Math.random() * xArray), (int) (Math.random() * zArray));
+			for (int x = 0; x < xArray; x++) {
+				for (int z = 0; z < zArray; z++) {
+					int temp = abc[0] * x + abc[1] * z + abc[2];
+					if(temp >= 0){
+						heightMap[x][z] += precision;
 					}else{
-						heightMap[x][z] = heightMap[x][z-1] + temp;
-					}
-				}else if(x != 0 && z == 0){
-					double temp = Math.random() * precision;
-					if(heightMap[x-1][z] + temp >= maxY){
-						heightMap[x][z] = heightMap[x-1][z] - temp;
-					}else{
-						heightMap[x][z] = heightMap[x-1][z] + temp;
-					}
-				}else{
-					double temp = Math.random() * precision;
-					if(heightMap[x-1][z] + temp >= maxY){
-						heightMap[x][z] = heightMap[x-1][z] - temp;
-					}else if(heightMap[x][z-1] + temp >= maxY){
-						heightMap[x][z] = heightMap[x][z-1] - temp;
-					}else if(heightMap[x-1][z-1] + temp >= maxY){
-						heightMap[x][z] = heightMap[x-1][z-1] - temp;
-					}else{
-						heightMap[x][z] = heightMap[x-1][z] + temp;
+						heightMap[x][z] -= precision;
 					}
 				}
 			}
 		}
 		return heightMap;
 	}
+	
+	private double[][] initMap(int xArray, int zArray, double maxY) {
+		double[][] mapInit = new double[xArray][zArray];
+		double middleY = maxY/2;
+		for (int x = 0; x < xArray; x++) {
+			for (int z = 0; z < zArray; z++) {
+				mapInit[x][z] = middleY;
+			}
+		}
+		return mapInit;
+	}
+
+	private int[] calculateLineEquation(int x1, int z1, int x2, int z2){
+		int[] abc = {0,0,0};
+		abc[0] = (z2 - z1);
+		abc[1] = -(x2 - x1);
+		abc[2] = -x1 * (z2 - z1) + z1 * (x2 - x1);
+		return abc;
+	}
+	
 }

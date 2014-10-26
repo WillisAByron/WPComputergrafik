@@ -23,26 +23,32 @@ public class TriangleMesh implements ITriangleMesh {
 		triangleList.add(t);
 	}
 
+//	@Override
+//	public int addVertex(Vertex v) {
+//		int returnValue = -1;
+//		int counter = 0;
+//		for (Vertex vertex : vertexList) {
+//			if (compareVertex(vertex, v))
+//				returnValue = counter;
+//			counter++;
+//		}
+//		if (returnValue == -1)
+//			vertexList.add(v);
+//		return returnValue > -1? returnValue : vertexList.size() - 1;
+//	}
+//
+//	private boolean compareVertex(Vertex v, Vertex u) {
+//		return (v.getPosition().data()[0] == u.getPosition().data()[0]
+//				&& v.getPosition().data()[1] == u.getPosition().data()[1] && v.getPosition().data()[2] == u
+//				.getPosition().data()[2]);
+//	}
+	
 	@Override
 	public int addVertex(Vertex v) {
-		int returnValue = -1;
-		int counter = 0;
-		for (Vertex vertex : vertexList) {
-			if (compareVertex(vertex, v))
-				returnValue = counter;
-			counter++;
-		}
-		if (returnValue == -1)
-			vertexList.add(v);
-		return returnValue > -1? returnValue : vertexList.size() - 1;
+		vertexList.add(v);
+		return vertexList.size() - 1;
 	}
-
-	private boolean compareVertex(Vertex v, Vertex u) {
-		return (v.getPosition().data()[0] == u.getPosition().data()[0]
-				&& v.getPosition().data()[1] == u.getPosition().data()[1] && v.getPosition().data()[2] == u
-				.getPosition().data()[2]);
-	}
-
+	
 	@Override
 	public int getNumberOfTriangles() {
 		return triangleList.size();
