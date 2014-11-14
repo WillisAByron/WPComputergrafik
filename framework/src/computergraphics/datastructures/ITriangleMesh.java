@@ -5,6 +5,8 @@
  */
 package computergraphics.datastructures;
 
+import computergraphics.math.Vector3;
+
 /**
  * This interface describes the valid operations for a triangle mesh structure.
  * 
@@ -69,4 +71,28 @@ public interface ITriangleMesh {
      * Clear mesh - remove all triangles and vertices.
      */
     public void clear();
+    
+    /**
+	 * Setzen des Textur-Dateinamens. Ist der String null, dann ist keine Textur
+	 * gesetzt.
+	 */
+	public void setTextureFilename(String filename );
+
+	/**
+	 * Zugriff auf den Namen der Texture-Datei. Liefert null, wenn keine Textur
+	 * gesetzt ist.
+	 */
+	public String getTextureFilename();
+
+	/**
+	 * Hinzufügen einer Texture-Koordinate (u, v, -).
+	 */
+	public void addTextureCoordinate(Vector3 texCoord);
+	
+	/**
+	 * Zugriff auf eine Texturkoordinate (u, v, -).
+	 * @param index
+	 * @return
+	 */
+	public Vector3 getTextureCoordinate(int index);
 }
