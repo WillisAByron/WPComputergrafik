@@ -27,9 +27,9 @@ public class GenerateTerrain {
 
 	public static final double MAX_Z = 1;
 
-	public static final double STEP = 0.0025;
+	public static final double STEP = 0.005;
 	
-	public static final int ITERATIONS = 1000;
+	public static final int ITERATIONS = 5000;
 
 	/**
 	 * @return
