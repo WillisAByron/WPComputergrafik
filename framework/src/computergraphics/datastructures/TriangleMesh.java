@@ -2,8 +2,15 @@ package computergraphics.datastructures;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.media.opengl.GLException;
+
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 import jogamp.opengl.glu.mipmap.Image;
 import computergraphics.math.Vector3;
@@ -21,6 +28,8 @@ public class TriangleMesh implements ITriangleMesh {
 	private Image heighField;
 	
 	private String textureFileName;
+	
+	private Texture texture;
 	
 	@Override
 	public void addTriangle(Triangle t) {
@@ -160,6 +169,12 @@ public class TriangleMesh implements ITriangleMesh {
 	@Override
 	public void setTextureFilename(String filename) {
 		textureFileName = filename;
+		try {
+			texture = TextureIO.newTexture(new File(textureFileName), true);
+		} catch (GLException | IOException e) {
+			e.printStackTrace();
+			System.err.println("Geht Nicht, mach Heile den Kram!!! " + e.getMessage());
+		}
 	}
 
 	@Override
@@ -175,5 +190,10 @@ public class TriangleMesh implements ITriangleMesh {
 	@Override
 	public Vector3 getTextureCoordinate(int index) {
 		return textureCoordinates.get(index);
+	}
+
+
+	public Texture getTexture() {
+		return texture;
 	}
 }

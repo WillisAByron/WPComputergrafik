@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.html.HTMLDocument.HTMLReader.HiddenAction;
 
 import computergraphics.datastructures.Triangle;
 import computergraphics.datastructures.TriangleMesh;
@@ -23,13 +22,15 @@ public class GenerateTerrain {
 
 	public static final double MAX_Y = 0.1;
 
-	public static final double PRECISION = 0.0005;
+	public static final double PRECISION = 0.02;
 
 	public static final double MAX_Z = 1;
 
-	public static final double STEP = 0.005;
-	
-	public static final int ITERATIONS = 5000;
+	public static final double STEP = 0.0025;
+
+	public static final int SMOOTH_FACTOR = 100;
+
+	public static final int ITERATIONS = 10000;
 
 	/**
 	 * @return
@@ -97,27 +98,74 @@ public class GenerateTerrain {
 	private double[][] generateMap(double maxX, double maxZ, double step, double maxY, double precision, int iterations) {
 		int xArray = (int) (maxX / step);
 		int zArray = (int) (maxZ / step);
-		double[][] heightMap = initMap(xArray,zArray, maxY);
+		double[][] heightMap = initMap(xArray, zArray, maxY);
 		for (int i = 0; i < iterations; i++) {
-			int[] abc = calculateLineEquation((int) (Math.random() * xArray), (int) (Math.random() * zArray), 
+			int[] abc = calculateLineEquation((int) (Math.random() * xArray), (int) (Math.random() * zArray),
 					(int) (Math.random() * xArray), (int) (Math.random() * zArray));
 			for (int x = 0; x < xArray; x++) {
 				for (int z = 0; z < zArray; z++) {
 					int temp = abc[0] * x + abc[1] * z + abc[2];
-					if(temp >= 0){
+					if (temp >= 0) {
 						heightMap[x][z] += precision;
-					}else{
+					} else {
 						heightMap[x][z] -= precision;
 					}
+				}
+			}
+			precision /= 1.02;
+		}
+		System.out.println("Prezision: " + precision);
+		heightMap = smoothMap(heightMap, SMOOTH_FACTOR, xArray, zArray);
+		return heightMap;
+	}
+
+	private double[][] smoothMap(double[][] heightMap, int smoothFactor, int xArray, int zArray) {
+		for (int i = 0; i < smoothFactor; i++) {
+			for (int x = 0; x < xArray; x++) {
+				for (int z = 0; z < zArray; z++) {
+					heightMap[x][z] = smoothHeight(heightMap, x, z, xArray - 1, zArray - 1);
 				}
 			}
 		}
 		return heightMap;
 	}
-	
+
+	private double smoothHeight(double[][] heightMap, int x, int z, int xArray, int zArray) {
+		double temp = 0;
+		int counter = 0;
+		if (z != 0){
+			temp += heightMap[x][z - 1];
+			counter++;
+		}
+		if (x != xArray && z != 0){
+			temp += heightMap[x + 1][z - 1];
+			counter++;
+		}
+		if (x != xArray){
+			temp += heightMap[x + 1][z];
+			counter++;
+		}
+		if (z != zArray){
+			temp += heightMap[x][z + 1];
+			counter++;
+		}
+		if (x != 0 && z != zArray){
+			temp += heightMap[x - 1][z + 1];
+			counter++;
+		}
+		if (x != 0){
+			temp += heightMap[x - 1][z];
+			counter++;
+		}
+		temp /= counter;
+		temp += heightMap[x][z];
+		temp /= 2;
+		return temp;
+	}
+
 	private double[][] initMap(int xArray, int zArray, double maxY) {
 		double[][] mapInit = new double[xArray][zArray];
-		double middleY = maxY/2;
+		double middleY = maxY / 2;
 		for (int x = 0; x < xArray; x++) {
 			for (int z = 0; z < zArray; z++) {
 				mapInit[x][z] = middleY;
@@ -126,12 +174,12 @@ public class GenerateTerrain {
 		return mapInit;
 	}
 
-	private int[] calculateLineEquation(int x1, int z1, int x2, int z2){
-		int[] abc = {0,0,0};
+	private int[] calculateLineEquation(int x1, int z1, int x2, int z2) {
+		int[] abc = { 0, 0, 0 };
 		abc[0] = (z2 - z1);
 		abc[1] = -(x2 - x1);
 		abc[2] = -x1 * (z2 - z1) + z1 * (x2 - x1);
 		return abc;
 	}
-	
+
 }

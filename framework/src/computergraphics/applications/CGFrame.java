@@ -46,8 +46,8 @@ public class CGFrame extends AbstractCGFrame {
 		TriangleMesh createGround = null;
 		try {
 			long before = System.currentTimeMillis();
-//			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP);
-			createGround = gt.generateRandomGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP, GenerateTerrain.PRECISION);
+			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP);
+//			createGround = gt.generateRandomGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP, GenerateTerrain.PRECISION);
 			long after = System.currentTimeMillis();
 			System.out.println("Working time: " + (after - before));
 			System.out.println("Numebr of Triangles: " + createGround.getNumberOfTriangles());
