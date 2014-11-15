@@ -13,16 +13,22 @@ public class TriangleMesh implements ITriangleMesh {
 	private List<Triangle> triangleList = new ArrayList<>();
 
 	private List<Vertex> vertexList = new ArrayList<>();
+	
+	private List<Vector3> textureCoordinates = new ArrayList<>();
 
 	private Image colorMap;
 	
 	private Image heighField;
+	
+	private String textureFileName;
 	
 	@Override
 	public void addTriangle(Triangle t) {
 		triangleList.add(t);
 	}
 
+	
+//	//Fügt nur Vertices hinzu, die noch nicht in der Liste sind
 //	@Override
 //	public int addVertex(Vertex v) {
 //		int returnValue = -1;
@@ -151,4 +157,23 @@ public class TriangleMesh implements ITriangleMesh {
 		
 	}
 
+	@Override
+	public void setTextureFilename(String filename) {
+		textureFileName = filename;
+	}
+
+	@Override
+	public String getTextureFilename() {
+		return textureFileName;
+	}
+
+	@Override
+	public void addTextureCoordinate(Vector3 texCoord) {
+		textureCoordinates.add(texCoord);
+	}
+
+	@Override
+	public Vector3 getTextureCoordinate(int index) {
+		return textureCoordinates.get(index);
+	}
 }
