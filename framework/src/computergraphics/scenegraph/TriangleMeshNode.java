@@ -1,12 +1,19 @@
 package computergraphics.scenegraph;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GLException;
 
 import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 import computergraphics.datastructures.Triangle;
 import computergraphics.datastructures.TriangleMesh;
+import computergraphics.math.Vector3;
 
 public class TriangleMeshNode extends Node {
 
@@ -49,12 +56,32 @@ public class TriangleMeshNode extends Node {
 
 	private void drawObject(GL2 gl) {
 		if (texture) {
-			gl.glEnable(gl.GL_TEXTURE_2D);
-			Texture tex = triangleMesh.getTexture();
-			tex.enable(gl.GL_TEXTURE_2D);
+			InputStream is;
+			Texture tex = null;
+			try {
+				is = new FileInputStream(triangleMesh.getTextureFilename());
+				tex = TextureIO.newTexture(is, false, "png");
+			} catch (GLException | IOException e) {
+				System.err.println("Geht Nicht, mach Heile den Kram!!! " + e.getMessage());
+			}
+			tex.enable(gl);
+			tex.bind(gl);
+			gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
+			gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
+			Vector3 vector;
 			for (Triangle triangle : triangleMesh.getTriangleList()) {
-				
-				
+				gl.glBegin(GL.GL_TRIANGLES);
+				gl.glNormal3dv(triangle.getNormal().data(), 0);
+				vector = triangleMesh.getTextureCoordinate(triangle.getTextureCoordinate(0));
+				gl.glTexCoord2d(vector.get(0), vector.get(1));
+				gl.glVertex3dv(triangleMesh.getVertex(triangle.getA()).getPosition().data(), 0);
+				vector = triangleMesh.getTextureCoordinate(triangle.getTextureCoordinate(1));
+				gl.glTexCoord2d(vector.get(0), vector.get(1));
+				gl.glVertex3dv(triangleMesh.getVertex(triangle.getB()).getPosition().data(), 0);
+				vector = triangleMesh.getTextureCoordinate(triangle.getTextureCoordinate(2));
+				gl.glTexCoord2d(vector.get(0), vector.get(1));
+				gl.glVertex3dv(triangleMesh.getVertex(triangle.getC()).getPosition().data(), 0);
+				gl.glEnd();
 			}
 		} else {
 			for (Triangle triangle : triangleMesh.getTriangleList()) {
