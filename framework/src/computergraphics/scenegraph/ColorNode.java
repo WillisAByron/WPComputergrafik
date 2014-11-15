@@ -18,6 +18,7 @@ public class ColorNode extends Node {
 	 * Shader representation.
 	 */
 	private CgGlslShader shader;
+	private CgGlslShader textureShader;
 
 	/**
 	 * Constructor
@@ -28,6 +29,9 @@ public class ColorNode extends Node {
 		// Use a Phong shader
 		shader = new CgGlslShader("shader/vertex_shader_phong_shading.glsl",
 				"shader/fragment_shader_phong_shading.glsl");
+		
+		textureShader = new CgGlslShader("shader/vertex_shader_texture.glsl",
+				"shader/fragment_shader_texture.glsl");
 
 		// Use a normal shader
 //		shader = new CgGlslShader("shader/vertex_shader_color.glsl",
@@ -53,7 +57,7 @@ public class ColorNode extends Node {
 		gl.glMaterialfv(GL.GL_FRONT_AND_BACK, GLLightingFunc.GL_SHININESS, shininess, 0);
 
 		// Setup the shader
-		JoglShader.use(shader, gl);
+		JoglShader.use(textureShader, gl);
 
 		for (int childIndex = 0; childIndex < getNumberOfChildren(); childIndex++) {
 			getChildNode(childIndex).drawGl(gl);
