@@ -17,7 +17,7 @@ import computergraphics.math.Vector3;
 
 public class TriangleMeshNode extends Node {
 
-	private static int NUMBER = 1;
+	private int number;
 
 	private boolean listExist = false;
 
@@ -28,11 +28,12 @@ public class TriangleMeshNode extends Node {
 	public TriangleMeshNode(TriangleMesh triangleMesh, boolean texture) {
 		this.triangleMesh = triangleMesh;
 		this.texture = texture;
+		this.number = 1;
 	}
 
 	public TriangleMeshNode(TriangleMesh triangleMesh, boolean texture, int number){
 		this(triangleMesh, texture);
-		TriangleMeshNode.NUMBER = number;
+		this.number = number;
 	}
 	
 	public TriangleMeshNode(TriangleMesh triangleMesh) {
@@ -42,9 +43,9 @@ public class TriangleMeshNode extends Node {
 	@Override
 	public void drawGl(GL2 gl) {
 		if (!listExist)
-			gl = getList(gl, NUMBER);
+			gl = getList(gl, number);
 
-		gl.glCallList(NUMBER);
+		gl.glCallList(number);
 		gl.glFlush();
 	}
 
