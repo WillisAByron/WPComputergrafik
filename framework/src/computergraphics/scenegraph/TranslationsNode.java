@@ -38,5 +38,11 @@ public class TranslationsNode extends Node {
 		// Restore original state
 		gl.glPopMatrix();
 	}
+	public Vector3 getTranslationsVector() {
+		return translationsVector;
+	}
 
+	public void setTranslationsVector(Vector3 translationsVector) {
+		this.translationsVector = translationsVector;
+	}
 }

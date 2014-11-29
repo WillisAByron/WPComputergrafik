@@ -42,5 +42,19 @@ public class RotationNode extends Node {
 		// Restore original state
 		gl.glPopMatrix();
 	}
+	public Vector3 getRotationsAchse() {
+		return rotationsAchse;
+	}
 
+	public void setRotationsAchse(Vector3 rotationsAchse) {
+		this.rotationsAchse = rotationsAchse;
+	}
+
+	public double getWinkel() {
+		return winkel;
+	}
+
+	public void setWinkel(double winkel) {
+		this.winkel = winkel;
+	}
 }

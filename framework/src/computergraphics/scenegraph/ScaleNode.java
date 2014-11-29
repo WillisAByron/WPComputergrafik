@@ -45,7 +45,13 @@ public class ScaleNode extends Node {
 
 		// Restore original state
 		gl.glPopMatrix();
-
+	}
+	
+	public Vector3 getScale() {
+		return scale;
 	}
 
+	public int getSize() {
+		return size;
+	}
 }
