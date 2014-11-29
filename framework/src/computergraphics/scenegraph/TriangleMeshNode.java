@@ -17,7 +17,7 @@ import computergraphics.math.Vector3;
 
 public class TriangleMeshNode extends Node {
 
-	private static final int NUMBER = 1;
+	private static int NUMBER = 1;
 
 	private boolean listExist = false;
 
@@ -30,6 +30,11 @@ public class TriangleMeshNode extends Node {
 		this.texture = texture;
 	}
 
+	public TriangleMeshNode(TriangleMesh triangleMesh, boolean texture, int number){
+		this(triangleMesh, texture);
+		TriangleMeshNode.NUMBER = number;
+	}
+	
 	public TriangleMeshNode(TriangleMesh triangleMesh) {
 		this(triangleMesh, false);
 	}

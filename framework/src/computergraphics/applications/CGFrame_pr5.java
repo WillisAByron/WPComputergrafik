@@ -14,6 +14,8 @@ import computergraphics.datastructures.Vertex;
 import computergraphics.framework.AbstractCGFrame;
 import computergraphics.math.Vector3;
 import computergraphics.scenegraph.ColorNode;
+import computergraphics.scenegraph.Node;
+import computergraphics.scenegraph.ScaleNode;
 import computergraphics.scenegraph.TranslationsNode;
 import computergraphics.scenegraph.TriangleMeshNode;
 import computergraphics.terrain.GenerateTerrain;
@@ -39,8 +41,8 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 	 */
 	public CGFrame_pr5(int timerInverval) {
 		super(timerInverval);
-		getRoot().addChild(new TriangleMeshNode(createLandscape(), false));
-		getRoot().addChild(new TriangleMeshNode(createTriangleMeshFromObject(FILE_NAME_SPHERE), false));
+		getRoot().addChild(createLandscape());
+		getRoot().addChild(new TriangleMeshNode(createTriangleMeshFromObject(FILE_NAME_SPHERE), false, 2));
 	}
 
 	private TriangleMesh createTriangleMeshFromObject(String filePath) {
@@ -51,7 +53,9 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 		return trMesh;
 	}
 
-	private TriangleMesh createLandscape() {
+	private Node createLandscape() {
+		ColorNode cn = new ColorNode(new Vector3(0,0,0));
+		TranslationsNode tn = new TranslationsNode(new Vector3(-0.5, 0, -0.5));
 		GenerateTerrain gt = new GenerateTerrain();
 		TriangleMesh createGround = null;
 		try {
@@ -59,7 +63,10 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return createGround;
+		TriangleMeshNode trMeshNode = new TriangleMeshNode(createGround, false, 1);
+		cn.addChild(tn);
+		tn.addChild(trMeshNode);
+		return cn;
 	}
 
 	/*

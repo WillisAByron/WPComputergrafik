@@ -40,7 +40,7 @@ public class ColorNode extends Node {
 
 	@Override
 	public void drawGl(GL2 gl) {
-
+		gl.glPushMatrix();
 		float r = (float) color.get(0);
 		float g = (float) color.get(1);
 		float b = (float) color.get(2);
@@ -62,7 +62,7 @@ public class ColorNode extends Node {
 		for (int childIndex = 0; childIndex < getNumberOfChildren(); childIndex++) {
 			getChildNode(childIndex).drawGl(gl);
 		}
-
+		gl.glPopMatrix();
 	}
 
 }
