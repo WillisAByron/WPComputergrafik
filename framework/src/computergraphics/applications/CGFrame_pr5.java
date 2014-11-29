@@ -5,7 +5,9 @@
  */
 package computergraphics.applications;
 
+import java.util.List;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import computergraphics.datastructures.ObjIO;
 import computergraphics.datastructures.Triangle;
@@ -14,7 +16,9 @@ import computergraphics.datastructures.Vertex;
 import computergraphics.framework.AbstractCGFrame;
 import computergraphics.math.Vector3;
 import computergraphics.scenegraph.ColorNode;
+import computergraphics.scenegraph.MovableObject;
 import computergraphics.scenegraph.Node;
+import computergraphics.scenegraph.RotationNode;
 import computergraphics.scenegraph.ScaleNode;
 import computergraphics.scenegraph.TranslationsNode;
 import computergraphics.scenegraph.TriangleMeshNode;
@@ -35,6 +39,7 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 
 	private static final String FILE_NAME_SPHERE = "meshes/sphere.obj";
 	
+	private List<MovableObject> lMO = new ArrayList<>();
 	
 	/**
 	 * Constructor.
@@ -42,7 +47,20 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 	public CGFrame_pr5(int timerInverval) {
 		super(timerInverval);
 		getRoot().addChild(createLandscape());
-		getRoot().addChild(new TriangleMeshNode(createTriangleMeshFromObject(FILE_NAME_SPHERE), false, 2));
+		
+		List<Vector3> wP = new ArrayList<>();
+		wP.add(new Vector3(0.5, 0, 0.5));
+		wP.add(new Vector3(-0.5, 0, -0.5));
+		
+		ScaleNode sN = new ScaleNode(new Vector3(0.02, 0.02, 0.02));
+		ColorNode cN = new ColorNode(new Vector3(0, 0, 1));
+		RotationNode rN = new RotationNode(0, new Vector3(0, 0, 0));
+		TranslationsNode tN = new TranslationsNode(new Vector3(0, 0.02, 0));
+		TriangleMeshNode tMN = new TriangleMeshNode(createTriangleMeshFromObject(FILE_NAME_SPHERE), false, 2);
+		MovableObject mO = new MovableObject(sN, cN, rN, tN, tMN, wP, GenerateTerrain.HEIGHFIELD_FILE);
+		getRoot().addChild(mO);
+		
+		lMO.add(mO);
 	}
 
 	private TriangleMesh createTriangleMeshFromObject(String filePath) {
@@ -76,7 +94,9 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 	 */
 	@Override
 	protected void timerTick() {
-		// System.out.println("Tick");
+		 for (MovableObject mO : lMO) {
+			mO.tick();
+		}
 	}
 
 	/**

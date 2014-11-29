@@ -18,11 +18,6 @@ public class ScaleNode extends Node {
 	private final Vector3 scale = new Vector3(1, 1, 1);
 	
 	/**
-	 * Change size
-	 */
-	private final int size = 4;
-
-	/**
 	 * Constructor.
 	 */
 	public ScaleNode(Vector3 scale) {
@@ -35,8 +30,8 @@ public class ScaleNode extends Node {
 		gl.glPushMatrix();
 
 		// Apply scaling
-		gl.glScalef((float) scale.get(0) * size, (float) scale.get(0) * size,
-				(float) scale.get(0) * size);
+		gl.glScalef((float) scale.get(0), (float) scale.get(0),
+				(float) scale.get(0));
 
 		// Draw all children
 		for (int childIndex = 0; childIndex < getNumberOfChildren(); childIndex++) {
@@ -49,9 +44,5 @@ public class ScaleNode extends Node {
 	
 	public Vector3 getScale() {
 		return scale;
-	}
-
-	public int getSize() {
-		return size;
 	}
 }
