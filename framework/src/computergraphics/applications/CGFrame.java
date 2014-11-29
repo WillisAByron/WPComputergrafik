@@ -55,7 +55,7 @@ public class CGFrame extends AbstractCGFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		TriangleMeshNode trMeshNode = new TriangleMeshNode(createGround);
+		TriangleMeshNode trMeshNode = new TriangleMeshNode(createGround, false);
 		getRoot().addChild(colorNode);
 
 		// ohne Verschiebung
