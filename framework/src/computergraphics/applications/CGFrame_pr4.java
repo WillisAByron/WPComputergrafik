@@ -47,6 +47,7 @@ public class CGFrame_pr4 extends AbstractCGFrame {
 		TriangleMesh trMesh = new TriangleMesh();
 		ObjIO objIO = new ObjIO();
 		objIO.einlesen(FILE_NAME_SQUARE_EXTENDED, trMesh);
+		trMesh.updateNormals();
 		return trMesh;
 	}
 
