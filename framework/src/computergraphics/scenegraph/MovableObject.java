@@ -65,7 +65,7 @@ public class MovableObject extends Node {
 		Vector3 aVector = (start.multiply(1-alpha)).add(end.multiply(alpha));
 		setHeigth(aVector);
 		tN.setTranslationsVector(aVector);
-		
+
 		if (alpha >= 1) {
 			alpha = 0;
 			start = end;
