@@ -12,6 +12,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.media.opengl.GL2;
 
+import computergraphics.math.Matrix3;
 import computergraphics.math.Vector3;
 import computergraphics.terrain.GenerateTerrain;
 
@@ -54,6 +55,7 @@ public class MovableObject extends Node {
 		
 		this.start = waypoints.get(0);
 		this.end = waypoints.get(1);
+		setMatrix();
 	}
 
 	@Override
@@ -68,20 +70,29 @@ public class MovableObject extends Node {
 			alpha = 0;
 			start = end;
 			end = waypoints.get(waypoints.indexOf(end) + 1);
+			setMatrix();
 		}
-		
-		//TODO
-		
-		
-		
 		for (int childIndex = 0; childIndex < getNumberOfChildren(); childIndex++) {
 			getChildNode(childIndex).drawGl(gl);
 		}
-
 		// Restore original state
 		gl.glPopMatrix();
 	}
 	
+	private void setMatrix() {
+		Vector3 aVector = end.subtract(start);
+		aVector.normalize();
+		Vector3 bVector = new Vector3(0, 1, 0);
+		Vector3 cVector = aVector.cross(bVector);
+		Matrix3 matrix = new Matrix3(aVector, bVector, cVector);
+		rN.setMatrix(matrix);
+		System.out.println("");
+		System.out.println("(" + aVector.get(0) + "," + aVector.get(1) + "," + aVector.get(2));
+		System.out.println("(" + bVector.get(0) + "," + bVector.get(1) + "," + bVector.get(2));
+		System.out.println("(" + cVector.get(0) + "," + cVector.get(1) + "," + cVector.get(2));
+		System.out.println("");
+	}
+
 	private void setHeigth(Vector3 aVector) {
 		final double pictureX = (bImage.getWidth(null) * ((aVector.get(0) + 0.5) / GenerateTerrain.MAX_X));
 		final double pictureZ = (bImage.getHeight(null) * ((aVector.get(2) + 0.5) / GenerateTerrain.MAX_Z));

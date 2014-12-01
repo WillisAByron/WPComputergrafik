@@ -37,7 +37,8 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 	 */
 	private static final long serialVersionUID = 4257130065274995543L;
 
-	private static final String FILE_NAME_SPHERE = "meshes/sphere.obj";
+	//private static final String FILE_NAME_SPHERE = "meshes/sphere.obj";
+	private static final String FILE_NAME_SPHERE = "meshes/untitled.obj";
 	
 	private List<MovableObject> lMO = new ArrayList<>();
 	
@@ -49,8 +50,10 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 		getRoot().addChild(createLandscape());
 		
 		List<Vector3> wP = new ArrayList<>();
-		wP.add(new Vector3(0.5, 0, 0.5));
-		wP.add(new Vector3(-0.5, 0, -0.5));
+		wP.add(new Vector3(0.45, 0, 0.45));
+		wP.add(new Vector3(-0.45, 0, -0.45));
+		wP.add(new Vector3(0.45, 0, -0.45));
+		wP.add(new Vector3(-0.45, 0, 0.45));
 		
 		ScaleNode sN = new ScaleNode(new Vector3(0.02, 0.02, 0.02));
 		ColorNode cN = new ColorNode(new Vector3(0, 0, 1));
