@@ -40,7 +40,12 @@ public class RotationNode extends Node {
 		if (matrix == null) {
 			gl.glRotated(winkel, rotationsAchse.get(0), rotationsAchse.get(1), rotationsAchse.get(2));	
 		}	else {
-			gl.glMultMatrixd(matrix.data(), 0);
+			double [] d = new double [] {	matrix.getRow(0).get(0), matrix.getRow(0).get(1), matrix.getRow(0).get(2), 0,
+											matrix.getRow(1).get(0), matrix.getRow(1).get(1), matrix.getRow(1).get(2), 0,
+											matrix.getRow(2).get(0), matrix.getRow(2).get(1), matrix.getRow(2).get(2), 0,
+											0,							0,						0,						1};
+			gl.glMultMatrixd(d, 0);
+			// TODO
 		}
 
 		for (int childIndex = 0; childIndex < getNumberOfChildren(); childIndex++) {

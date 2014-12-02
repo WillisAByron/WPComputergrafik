@@ -37,8 +37,8 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 	 */
 	private static final long serialVersionUID = 4257130065274995543L;
 
-	private static final String FILE_NAME_SPHERE = "meshes/sphere.obj";
-//	private static final String FILE_NAME_SPHERE = "meshes/untitled.obj";
+//	private static final String FILE_NAME_SPHERE = "meshes/sphere.obj";
+	private static final String FILE_NAME_SPHERE = "meshes/untitled.obj";
 	
 	private List<MovableObject> lMO = new ArrayList<>();
 	

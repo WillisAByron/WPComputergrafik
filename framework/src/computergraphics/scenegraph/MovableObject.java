@@ -65,7 +65,7 @@ public class MovableObject extends Node {
 		Vector3 aVector = (start.multiply(1-alpha)).add(end.multiply(alpha));
 		setHeigth(aVector);
 		tN.setTranslationsVector(aVector);
-
+// TODO
 		if (alpha >= 1) {
 			alpha = 0;
 			start = end;
@@ -86,11 +86,6 @@ public class MovableObject extends Node {
 		Vector3 cVector = aVector.cross(bVector);
 		Matrix3 matrix = new Matrix3(aVector, bVector, cVector);
 		rN.setMatrix(matrix);
-		System.out.println("");
-		System.out.println("(" + aVector.get(0) + "," + aVector.get(1) + "," + aVector.get(2));
-		System.out.println("(" + bVector.get(0) + "," + bVector.get(1) + "," + bVector.get(2));
-		System.out.println("(" + cVector.get(0) + "," + cVector.get(1) + "," + cVector.get(2));
-		System.out.println("");
 	}
 
 	private void setHeigth(Vector3 aVector) {
