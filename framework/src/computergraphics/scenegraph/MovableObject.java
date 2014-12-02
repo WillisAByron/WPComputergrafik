@@ -8,10 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.media.opengl.GL2;
-
 import computergraphics.math.Matrix3;
 import computergraphics.math.Vector3;
 import computergraphics.terrain.GenerateTerrain;
@@ -62,16 +60,6 @@ public class MovableObject extends Node {
 	public void drawGl(GL2 gl) {
 		// Remember current state of the render system
 		gl.glPushMatrix();
-		Vector3 aVector = (start.multiply(1-alpha)).add(end.multiply(alpha));
-		setHeigth(aVector);
-		tN.setTranslationsVector(aVector);
-// TODO
-		if (alpha >= 1) {
-			alpha = 0;
-			start = end;
-			end = waypoints.get(waypoints.indexOf(end) + 1);
-			setMatrix();
-		}
 		for (int childIndex = 0; childIndex < getNumberOfChildren(); childIndex++) {
 			getChildNode(childIndex).drawGl(gl);
 		}
@@ -97,5 +85,14 @@ public class MovableObject extends Node {
 
 	public void tick() {
 		alpha += 0.05;
+		Vector3 aVector = (start.multiply(1-alpha)).add(end.multiply(alpha));
+		setHeigth(aVector);
+		tN.setTranslationsVector(aVector);
+		if (alpha >= 1) {
+			alpha = 0;
+			start = end;
+			end = waypoints.get(waypoints.indexOf(end) + 1);
+			setMatrix();
+		}
 	}
 }

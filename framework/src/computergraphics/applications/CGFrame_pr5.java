@@ -8,11 +8,8 @@ package computergraphics.applications;
 import java.util.List;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import computergraphics.datastructures.ObjIO;
-import computergraphics.datastructures.Triangle;
 import computergraphics.datastructures.TriangleMesh;
-import computergraphics.datastructures.Vertex;
 import computergraphics.framework.AbstractCGFrame;
 import computergraphics.math.Vector3;
 import computergraphics.scenegraph.ColorNode;
@@ -106,6 +103,6 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 	 * Program entry point.
 	 */
 	public static void main(String[] args) {
-		new CGFrame_pr5(1000);
+		new CGFrame_pr5(500);
 	}
 }

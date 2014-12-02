@@ -16,7 +16,7 @@ public class RotationNode extends Node {
 
 	private double winkel;
 	
-	private Matrix3 matrix;
+	private double[] matrix4;
 
 	/**
 	 * Konstruktor
@@ -37,15 +37,10 @@ public class RotationNode extends Node {
 		gl.glPushMatrix();
 		
 		// Rotation
-		if (matrix == null) {
+		if (matrix4 == null) {
 			gl.glRotated(winkel, rotationsAchse.get(0), rotationsAchse.get(1), rotationsAchse.get(2));	
 		}	else {
-			double [] d = new double [] {	matrix.getRow(0).get(0), matrix.getRow(0).get(1), matrix.getRow(0).get(2), 0,
-											matrix.getRow(1).get(0), matrix.getRow(1).get(1), matrix.getRow(1).get(2), 0,
-											matrix.getRow(2).get(0), matrix.getRow(2).get(1), matrix.getRow(2).get(2), 0,
-											0,							0,						0,						1};
-			gl.glMultMatrixd(d, 0);
-			// TODO
+			gl.glMultMatrixd(matrix4, 0);
 		}
 
 		for (int childIndex = 0; childIndex < getNumberOfChildren(); childIndex++) {
@@ -72,10 +67,13 @@ public class RotationNode extends Node {
 	}
 	
 	public void setMatrix(Matrix3 matrix){
-		this.matrix = matrix;
+		matrix4 = new double [] {	matrix.getRow(0).get(0), matrix.getRow(0).get(1), matrix.getRow(0).get(2), 0,
+				matrix.getRow(1).get(0), matrix.getRow(1).get(1), matrix.getRow(1).get(2), 0,
+				matrix.getRow(2).get(0), matrix.getRow(2).get(1), matrix.getRow(2).get(2), 0,
+				0,							0,						0,						1};
 	}
 	
-	public Matrix3 getMatrix(){
-		return this.matrix;
+	public double[] getMatrix(){
+		return this.matrix4;
 	}
 }
