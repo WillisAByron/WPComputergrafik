@@ -24,6 +24,8 @@ import computergraphics.terrain.GenerateTerrain;
 public class CGFrame_Terrain extends AbstractCGFrame {
 
 	private static final long serialVersionUID = 4257130065274995543L;
+	
+	public static final String HEIGHFIELD_FILE = "ground/heightField.png";
 
 	/**
 	 * Constructor.
@@ -31,12 +33,12 @@ public class CGFrame_Terrain extends AbstractCGFrame {
 	public CGFrame_Terrain(int timerInverval) {
 		super(timerInverval);
 		
-		ColorNode cn = new ColorNode(new Vector3(0,0,0));
+		ColorNode cn = new ColorNode(new Vector3(0,0,0), false);
 		TranslationsNode tn = new TranslationsNode(new Vector3(-0.5, 0, -0.5));
 		GenerateTerrain gt = new GenerateTerrain();
 		TriangleMesh createGround = null;
 		try {
-			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP);
+			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP, HEIGHFIELD_FILE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

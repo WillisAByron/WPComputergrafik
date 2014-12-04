@@ -18,21 +18,24 @@ public class ColorNode extends Node {
 	 * Shader representation.
 	 */
 	private CgGlslShader shader;
-	private CgGlslShader textureShader;
+	private boolean texture = false;
 
 	/**
 	 * Constructor
 	 */
-	public ColorNode(Vector3 color) {
+	public ColorNode(Vector3 color, boolean texture) {
 		this.color.copy(color);
-
-		// Use a Phong shader
-		shader = new CgGlslShader("shader/vertex_shader_phong_shading.glsl",
-				"shader/fragment_shader_phong_shading.glsl");
+		this.texture = texture;
 		
-//		textureShader = new CgGlslShader("shader/vertex_shader_texture.glsl",
-//				"shader/fragment_shader_texture.glsl");
-
+		// Use a Phong shader
+		if (texture) {
+			shader = new CgGlslShader("shader/vertex_shader_texture.glsl",
+					"shader/fragment_shader_texture.glsl");
+		} else {
+			shader = new CgGlslShader("shader/vertex_shader_phong_shading.glsl",
+					"shader/fragment_shader_phong_shading.glsl");
+		}
+		
 		// Use a normal shader
 //		shader = new CgGlslShader("shader/vertex_shader_color.glsl",
 //				"shader/fragment_shader_color.glsl");

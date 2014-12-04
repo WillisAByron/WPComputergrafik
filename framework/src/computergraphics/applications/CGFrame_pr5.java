@@ -8,6 +8,7 @@ package computergraphics.applications;
 import java.util.List;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import computergraphics.datastructures.ObjIO;
 import computergraphics.datastructures.TriangleMesh;
 import computergraphics.framework.AbstractCGFrame;
@@ -37,6 +38,10 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 //	private static final String FILE_NAME_SPHERE = "meshes/sphere.obj";
 	private static final String FILE_NAME_SPHERE = "meshes/untitled.obj";
 	
+	private static final String HEIGHFIELD_FILE = "ground/heightField.png";
+	
+	private final String colorFile = "ground/color.png";
+	
 	private List<MovableObject> lMO = new ArrayList<>();
 	
 	/**
@@ -53,11 +58,11 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 		wP.add(new Vector3(-0.45, 0, 0.45));
 		
 		ScaleNode sN = new ScaleNode(new Vector3(0.02, 0.02, 0.02));
-		ColorNode cN = new ColorNode(new Vector3(0, 0, 1));
+		ColorNode cN = new ColorNode(new Vector3(0, 0, 1), false);
 		RotationNode rN = new RotationNode(0, new Vector3(0, 0, 0));
 		TranslationsNode tN = new TranslationsNode(new Vector3(0, 0.02, 0));
 		TriangleMeshNode tMN = new TriangleMeshNode(createTriangleMeshFromObject(FILE_NAME_SPHERE), false, 2);
-		MovableObject mO = new MovableObject(sN, cN, rN, tN, tMN, wP, GenerateTerrain.HEIGHFIELD_FILE);
+		MovableObject mO = new MovableObject(sN, cN, rN, tN, tMN, wP, HEIGHFIELD_FILE);
 		getRoot().addChild(mO);
 		
 		lMO.add(mO);
@@ -72,12 +77,12 @@ public class CGFrame_pr5 extends AbstractCGFrame {
 	}
 
 	private Node createLandscape() {
-		ColorNode cn = new ColorNode(new Vector3(0,0,0));
+		ColorNode cn = new ColorNode(new Vector3(0,0,0), false);
 		TranslationsNode tn = new TranslationsNode(new Vector3(-0.5, 0, -0.5));
 		GenerateTerrain gt = new GenerateTerrain();
 		TriangleMesh createGround = null;
 		try {
-			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP);
+			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP, HEIGHFIELD_FILE, colorFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

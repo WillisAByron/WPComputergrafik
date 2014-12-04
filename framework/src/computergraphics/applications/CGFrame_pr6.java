@@ -6,10 +6,7 @@
 package computergraphics.applications;
 
 import java.util.List;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import computergraphics.datastructures.ObjIO;
@@ -36,10 +33,23 @@ public class CGFrame_pr6 extends AbstractCGFrame {
 	/**
 	 * 
 	 */
+	
+	public final double MAX_X = 1;
+
+	public final double MAX_Y = 0.5;
+
+	public final double MAX_Z = 1;
+
+	public final double STEP = 0.005;
+	
 	private static final long serialVersionUID = 4257130065274995543L;
 
 //	private static final String FILE_NAME_SPHERE = "meshes/sphere.obj";
 	private static final String FILE_NAME_SPHERE = "meshes/untitled.obj";
+	
+	public final String heightFile = "ground/hoehenkarte_deutschland.png";
+	
+	private final String textureFileName = "meshes/textures/karte_deutschland.jpg";
 	
 	private List<MovableObject> lMO = new ArrayList<>();
 	
@@ -48,23 +58,24 @@ public class CGFrame_pr6 extends AbstractCGFrame {
 	 */
 	public CGFrame_pr6(int timerInverval) {
 		super(timerInverval);
-		getRoot().addChild(createLandscape());
 		
-		List<Vector3> wP = new ArrayList<>();
-		wP.add(new Vector3(0.45, 0, 0.45));
-		wP.add(new Vector3(-0.45, 0, -0.45));
-		wP.add(new Vector3(0.45, 0, -0.45));
-		wP.add(new Vector3(-0.45, 0, 0.45));
+		getRoot().addChild(createLandscape(new Vector3(5, 3, 5)));
 		
-		ScaleNode sN = new ScaleNode(new Vector3(0.02, 0.02, 0.02));
-		ColorNode cN = new ColorNode(new Vector3(0, 0, 1), false);
-		RotationNode rN = new RotationNode(0, new Vector3(0, 0, 0));
-		TranslationsNode tN = new TranslationsNode(new Vector3(0, 0.02, 0));
-		TriangleMeshNode tMN = new TriangleMeshNode(createTriangleMeshFromObject(FILE_NAME_SPHERE), false, 2);
-		MovableObject mO = new MovableObject(sN, cN, rN, tN, tMN, wP, GenerateTerrain.HEIGHFIELD_FILE);
-		getRoot().addChild(mO);
-		
-		lMO.add(mO);
+//		List<Vector3> wP = new ArrayList<>();
+//		wP.add(new Vector3(0.45, 0, 0.45));
+//		wP.add(new Vector3(-0.45, 0, -0.45));
+//		wP.add(new Vector3(0.45, 0, -0.45));
+//		wP.add(new Vector3(-0.45, 0, 0.45));
+//		
+//		ScaleNode sN = new ScaleNode(new Vector3(0.02, 0.02, 0.02));
+//		ColorNode cN = new ColorNode(new Vector3(0, 0, 1), false);
+//		RotationNode rN = new RotationNode(0, new Vector3(0, 0, 0));
+//		TranslationsNode tN = new TranslationsNode(new Vector3(0, 0.02, 0));
+//		TriangleMeshNode tMN = new TriangleMeshNode(createTriangleMeshFromObject(FILE_NAME_SPHERE), false, 2);
+//		MovableObject mO = new MovableObject(sN, cN, rN, tN, tMN, wP, heightFile);
+//		getRoot().addChild(mO);
+//		
+//		lMO.add(mO);
 	}
 
 	private TriangleMesh createTriangleMeshFromObject(String filePath) {
@@ -75,19 +86,21 @@ public class CGFrame_pr6 extends AbstractCGFrame {
 		return trMesh;
 	}
 
-	private Node createLandscape() {
-		ColorNode cn = new ColorNode(new Vector3(0,0,0), false);
-		TranslationsNode tn = new TranslationsNode(new Vector3(-0.5, 0, -0.5));
+	private Node createLandscape(Vector3 vector) {
+		ColorNode cn = new ColorNode(new Vector3(0, 0, 0), false);
+		ScaleNode sn = new ScaleNode(vector);
+		TranslationsNode tn = new TranslationsNode(new Vector3((vector.get(0) / 2) * (-1), 0, (vector.get(2) / 2) * (-1)));
 		GenerateTerrain gt = new GenerateTerrain();
-		TriangleMesh createGround = null;
+		TriangleMesh newGround = null;
 		try {
-			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP);
+			newGround = gt.generateGround(MAX_X, MAX_Y, MAX_Z, STEP, heightFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		TriangleMeshNode trMeshNode = new TriangleMeshNode(createGround, false, 1);
+		TriangleMeshNode trMeshNode = new TriangleMeshNode(newGround, false, 1);
 		cn.addChild(tn);
-		tn.addChild(trMeshNode);
+		tn.addChild(sn);
+		sn.addChild(trMeshNode);
 		return cn;
 	}
 

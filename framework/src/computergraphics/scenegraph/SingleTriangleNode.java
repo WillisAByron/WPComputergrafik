@@ -75,7 +75,6 @@ public class SingleTriangleNode extends Node {
 		// Set color of Triangle to green!!
 		gl.glColor3f(0.0f, 1.0f, 0.0f);
 		this.listExist = true;
-		System.out.println("erzeugt!");
 		return gl;
 	}
 

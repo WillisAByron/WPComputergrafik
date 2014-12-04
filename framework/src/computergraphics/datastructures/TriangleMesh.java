@@ -96,14 +96,6 @@ public class TriangleMesh implements ITriangleMesh {
 		}
 	}
 	
-	@SuppressWarnings("unused")
-	private void showNormalVector(Triangle triangle){
-		System.out.println("Calculated");
-		System.out.println("X: " + triangle.getNormal().data()[0]);
-		System.out.println("Y: " + triangle.getNormal().data()[1]);
-		System.out.println("Z: " + triangle.getNormal().data()[2]);
-	}
-
 	private void calculateNormal(Triangle triangle) {
 		final Vector3 vectorU = subtrationOfVertecies(vertexList.get(triangle.getB()), vertexList.get(triangle.getA()));
 		final Vector3 vectorV = subtrationOfVertecies(vertexList.get(triangle.getC()), vertexList.get(triangle.getA()));

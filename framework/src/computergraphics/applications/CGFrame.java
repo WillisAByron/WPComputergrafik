@@ -29,6 +29,9 @@ public class CGFrame extends AbstractCGFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 4257130065274995543L;
+	
+	public static final String HEIGHFIELD_FILE = "ground/heightField.png";
+	private final String colorFile = "ground/color.png";
 
 	/**
 	 * Constructor.
@@ -36,7 +39,7 @@ public class CGFrame extends AbstractCGFrame {
 	public CGFrame(int timerInverval) {
 		super(timerInverval);
 		
-		ColorNode colorNode = new ColorNode(new Vector3(0.25, 0.25, 0.75));
+		ColorNode colorNode = new ColorNode(new Vector3(0.25, 0.25, 0.75), false);
 		// SingleTriangleNode triangleNode = new SingleTriangleNode();
 		// SingleTriangleNode triangleNode2 = new SingleTriangleNode();
 		TranslationsNode tn = new TranslationsNode(new Vector3(-0.5, 0, -0.5));
@@ -46,8 +49,7 @@ public class CGFrame extends AbstractCGFrame {
 		TriangleMesh createGround = null;
 		try {
 			long before = System.currentTimeMillis();
-			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP);
-//			createGround = gt.generateRandomGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP, GenerateTerrain.PRECISION);
+			createGround = gt.generateGround(GenerateTerrain.MAX_X, GenerateTerrain.MAX_Y, GenerateTerrain.MAX_Z, GenerateTerrain.STEP, HEIGHFIELD_FILE, colorFile);
 			long after = System.currentTimeMillis();
 			System.out.println("Working time: " + (after - before));
 			System.out.println("Numebr of Triangles: " + createGround.getNumberOfTriangles());

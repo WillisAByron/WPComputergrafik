@@ -14,9 +14,7 @@ import computergraphics.math.Vector3;
 
 public class GenerateTerrain {
 
-	public static final String HEIGHFIELD_FILE = "ground/heightField.png";
-
-	public static final String COLOR_FILE = "ground/color.png";
+	public String colorFile;
 
 	public static final double MAX_X = 1;
 
@@ -36,9 +34,9 @@ public class GenerateTerrain {
 	 * @return
 	 * @throws IOException
 	 */
-	public TriangleMesh generateGround(double maxX, double maxY, double maxZ, double step) throws IOException {
+	public TriangleMesh generateGround(double maxX, double maxY, double maxZ, double step, String heightField) throws IOException {
 		TriangleMesh trMesh = new TriangleMesh();
-		BufferedImage bImage = ImageIO.read(new File(HEIGHFIELD_FILE));
+		BufferedImage bImage = ImageIO.read(new File(heightField));
 		final double maxStepsX = maxX / step;
 		final double maxStepsZ = maxZ / step;
 		for (double x = 0; x <= maxX - step; x += step) {
@@ -59,8 +57,15 @@ public class GenerateTerrain {
 			}
 		}
 		trMesh.updateNormals();
-		trMesh.updateColor(ImageIO.read(new File(COLOR_FILE)), maxStepsX, maxStepsZ, STEP);
+		if (colorFile != null) {
+			trMesh.updateColor(ImageIO.read(new File(colorFile)), maxStepsX, maxStepsZ, STEP);
+		}
 		return trMesh;
+	}
+	
+	public TriangleMesh generateGround(double maxX, double maxY, double maxZ, double step, String heightField, String colorFile) throws IOException{
+		this.colorFile = colorFile;
+		return generateGround(maxX, maxY, maxZ, step, heightField);
 	}
 
 	private double getHeight(BufferedImage bImage, double x, double z, double maxStepsX, double maxStepsZ) {

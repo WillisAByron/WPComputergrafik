@@ -56,7 +56,6 @@ public class TriangleMeshNode extends Node {
 		// Set color of Triangle to green!!
 		// gl.glColor3f(0.0f, 0.7f, 0.2f);
 		this.listExist = true;
-		System.out.println("erzeugt!");
 		return gl;
 	}
 
@@ -68,7 +67,6 @@ public class TriangleMeshNode extends Node {
 				is = new FileInputStream(triangleMesh.getTextureFilename());
 				tex = TextureIO.newTexture(is, false, "png");
 			} catch (GLException | IOException e) {
-				System.err.println("Geht Nicht, mach Heile den Kram!!! " + e.getMessage());
 			}
 			tex.enable(gl);
 			tex.bind(gl);
