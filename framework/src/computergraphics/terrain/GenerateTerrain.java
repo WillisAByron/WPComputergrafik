@@ -67,6 +67,36 @@ public class GenerateTerrain {
 		this.colorFile = colorFile;
 		return generateGround(maxX, maxY, maxZ, step, heightField);
 	}
+	
+	public TriangleMesh generateGroundWithTexture(double maxX, double maxY, double maxZ, double step, String heightField, String textureFilrName) throws IOException {
+		//TODO
+		TriangleMesh trMesh = new TriangleMesh();
+		BufferedImage bImage = ImageIO.read(new File(heightField));
+		final double maxStepsX = maxX / step;
+		final double maxStepsZ = maxZ / step;
+		for (double x = 0; x <= maxX - step; x += step) {
+			for (double z = 0; z <= maxZ - step; z += step) {
+				int a = trMesh.addVertex(new Vertex(new Vector3(x, getHeight(bImage, x, z, maxStepsX, maxStepsZ), z)));
+				int b = trMesh.addVertex(new Vertex(new Vector3(x + step, getHeight(bImage, x + step, z, maxStepsX,
+						maxStepsZ), z)));
+				int c = trMesh.addVertex(new Vertex(new Vector3(x,
+						getHeight(bImage, x, z + step, maxStepsX, maxStepsZ), z + step)));
+				trMesh.addTriangle(new Triangle(a, b, c));
+				int aOppeside = trMesh.addVertex(new Vertex(new Vector3(x + step, getHeight(bImage, x + step, z + step,
+						maxStepsX, maxStepsZ), z + step)));
+				int bOppeside = trMesh.addVertex(new Vertex(new Vector3(x + step, getHeight(bImage, x + step, z,
+						maxStepsX, maxStepsZ), z)));
+				int cOppeside = trMesh.addVertex(new Vertex(new Vector3(x, getHeight(bImage, x, z + step, maxStepsX,
+						maxStepsZ), z + step)));
+				trMesh.addTriangle(new Triangle(aOppeside, bOppeside, cOppeside));
+			}
+		}
+		trMesh.updateNormals();
+		if (colorFile != null) {
+			trMesh.updateColor(ImageIO.read(new File(colorFile)), maxStepsX, maxStepsZ, STEP);
+		}
+		return trMesh;
+	}
 
 	private double getHeight(BufferedImage bImage, double x, double z, double maxStepsX, double maxStepsZ) {
 		final double pictureX = (bImage.getWidth(null) / maxStepsX) * (x / STEP);
