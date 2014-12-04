@@ -11,7 +11,6 @@ import computergraphics.datastructures.TriangleMesh;
 import computergraphics.datastructures.Vertex;
 import computergraphics.framework.AbstractCGFrame;
 import computergraphics.math.Vector3;
-import computergraphics.scenegraph.TranslationsNode;
 import computergraphics.scenegraph.TriangleMeshNode;
 
 /**
@@ -29,8 +28,10 @@ public class CGFrame_pr4 extends AbstractCGFrame {
 
 	private static final String FILE_NAME_CUBE = "meshes/cube.obj";
 	
+	@SuppressWarnings("unused")
 	private static final String FILE_NAME_SQUARE = "meshes/square.obj";
 	
+	@SuppressWarnings("unused")
 	private static final String FILE_NAME_SQUARE_EXTENDED = "meshes/square_extended.obj";
 	
 	/**
